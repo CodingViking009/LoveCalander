@@ -17,6 +17,8 @@ namespace CalanderTest
         private DateTime _selectedDate;
         private Visibility _panelVisibility;
         private Visibility _buttonVisibility;
+        private Visibility _imageVisibility;
+        private Visibility _altTextVisibility;
         private ObservableCollection<string> _dateText;
         private ObservableCollection<ImageSource> _photos;
         private string _dateTextIn;
@@ -37,6 +39,18 @@ namespace CalanderTest
         {
             get => _buttonVisibility;
             set => SetProperty(ref _buttonVisibility, value);
+        }
+
+        public Visibility ImageVisibility
+        {
+            get => _imageVisibility;
+            set => SetProperty(ref _imageVisibility, value);
+        }
+
+        public Visibility AltTextVisibility
+        {
+            get => _altTextVisibility;
+            set => SetProperty(ref _altTextVisibility, value);
         }
 
         public ObservableCollection<string> DateText
@@ -68,6 +82,8 @@ namespace CalanderTest
             SelectedDate = DateTime.Now;
             PanelVisibility = Visibility.Collapsed;
             ButtonVisibility = Visibility.Visible;
+            ImageVisibility = Visibility.Collapsed;
+            AltTextVisibility = Visibility.Visible;
             EnterComm = new DelegateCommand(Enter);
             LeaveComm = new DelegateCommand(Leave);
             AddPhotoComm = new DelegateCommand(AddPhoto);
@@ -80,6 +96,17 @@ namespace CalanderTest
             DateText = m.MemoryDictionary.ContainsKey(SelectedDate)
                 ? m.MemoryDictionary[SelectedDate]
                 : new ObservableCollection<string> { "No data available" };
+            if (m.ImageDictionary.ContainsKey(SelectedDate))
+            {
+                AltTextVisibility = Visibility.Collapsed;
+                ImageVisibility = Visibility.Visible;
+                Photos = m.ImageDictionary[SelectedDate];
+            }
+            else
+            {
+                ImageVisibility = Visibility.Collapsed;
+                AltTextVisibility = Visibility.Visible;
+            }
         }
 
         public void Leave()
@@ -92,7 +119,7 @@ namespace CalanderTest
             }
             else if (DateTextIn == "")
             {
-                MessageBox.Show("You did not enter any text");
+                
             }
             else if (m.MemoryDictionary.ContainsKey(SelectedDate))
             {
@@ -113,11 +140,19 @@ namespace CalanderTest
 
             if (openFileDialog.ShowDialog() == true)
             {
+                if (!m.ImageDictionary.ContainsKey(SelectedDate))
+                {
+                    m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>();
+                }
+
                 foreach (string fileName in openFileDialog.FileNames)
                 {
                     var bitmap = new BitmapImage(new Uri(fileName));
-                    Photos.Add(bitmap);
+                    m.ImageDictionary[SelectedDate].Add(bitmap);
                 }
+                AltTextVisibility = Visibility.Collapsed;
+                ImageVisibility = Visibility.Visible;
+                Photos = m.ImageDictionary[SelectedDate];
             }
         }
     }
