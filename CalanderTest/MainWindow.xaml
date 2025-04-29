@@ -25,50 +25,49 @@
 
             <Calendar VerticalAlignment="Center" SelectedDate="{Binding SelectedDate}"/>
 
-            <Button Grid.Column="1" Height="30" Width="200" Visibility="{Binding ButtonVisibility}" Content="Enter Date" Command="{Binding EnterComm}"/>
+            <Button Grid.Column="1" Height="30" Width="200" Content="Enter Date" Visibility="{Binding ButtonVisibility}" Command="{Binding EnterComm}"/>
 
-            <StackPanel Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding PanelVisibility}" Margin="20">
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Center" Visibility="{Binding PanelVisibility}">
+                <StackPanel>
 
-                <Label Content="{Binding SelectedDate}"/>
+                    <Label Content="{Binding SelectedDate}"/>
 
-                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Margin="10">
 
-                    <ListBox ItemsSource="{Binding Photos}" Visibility="{Binding ImageVisibility}" IsEnabled="False">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <DockPanel/>
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Image Source="{Binding}" Width="150" Height="150" Margin="5"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                        <ListBox ItemsSource="{Binding Photos}" Visibility="{Binding ImageVisibility}" IsEnabled="False">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <DockPanel/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding}" Width="150" Height="150" Margin="5"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
 
-                    <Label Content="No images on this date" Visibility="{Binding AltTextVisibility}"/>
+                        <Label Content="No images on this date" Visibility="{Binding AltTextVisibility}"/>
 
-                    <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-                        <CheckBox IsChecked="{Binding Repeat}" Content="Repeating Date" Command="{Binding CheckBoxComm}"/>
-                        <ComboBox IsEnabled="{Binding SelectEnabled}" ItemsSource="{Binding RepeatFrequencyList}" SelectedItem="{Binding RepeatFrequency}"/>
+                        <Button Content="Upload Photo" Command="{Binding AddPhotoComm}" Margin="5,0,10,0"/>
                     </StackPanel>
 
-                    <Button Content="Upload Photo" Command="{Binding AddPhotoComm}"/>
+
+
+                    <ListBox IsEnabled="False" ItemsSource="{Binding DateText}" Margin="10"/>
+
+                    <TextBox Text="{Binding DateTextIn}" Margin="10"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <CheckBox IsChecked="{Binding Repeat}" Content="Repeating Date" Command="{Binding CheckBoxComm}" VerticalAlignment="Center"/>
+                        <ComboBox IsEnabled="{Binding SelectEnabled}" ItemsSource="{Binding RepeatFrequencyList}" SelectedItem="{Binding RepeatFrequency}" Margin="50,0" Width="100"/>
+                        <Button Content="Save" Margin="20,0" Command="{Binding SaveComm}"/>
+                    </StackPanel>
+
+                    <Button Content="Exit Date" Command="{Binding LeaveComm}"/>
+
                 </StackPanel>
-
-
-
-                <ListBox IsEnabled="False" ItemsSource="{Binding DateText}"/>
-
-                <Label/>
-
-                <TextBox Text="{Binding DateTextIn}"/>
-
-                <Label/>
-
-                <Button Content="Exit Date" Command="{Binding LeaveComm}"/>
-
-            </StackPanel>
+            </ScrollViewer>
 
         </Grid>
     </Grid>

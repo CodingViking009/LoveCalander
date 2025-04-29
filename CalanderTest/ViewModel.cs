@@ -92,7 +92,18 @@ namespace CalanderTest
         public bool Repeat
         {
             get => _repeat;
-            set => SetProperty(ref _repeat, value);
+            set
+            {
+                SetProperty(ref _repeat, value);
+                if (Repeat)
+                {
+                    SelectEnabled = true;
+                }
+                else
+                {
+                    SelectEnabled = false;
+                }
+            }
         }
 
         public bool SelectEnabled
@@ -103,6 +114,7 @@ namespace CalanderTest
 
         public ICommand EnterComm { get; }
         public ICommand LeaveComm { get; }
+        public ICommand SaveComm { get; }
         public ICommand AddPhotoComm { get; }
         public ICommand CheckBoxComm { get; }
 
@@ -120,6 +132,7 @@ namespace CalanderTest
             AltTextVisibility = Visibility.Visible;
             EnterComm = new DelegateCommand(Enter);
             LeaveComm = new DelegateCommand(Leave);
+            SaveComm = new DelegateCommand(Save);
             AddPhotoComm = new DelegateCommand(AddPhoto);
             CheckBoxComm = new DelegateCommand(CheckBox);
         }
@@ -149,17 +162,11 @@ namespace CalanderTest
             }
         }
 
-        public void Leave()
+        public void Save()
         {
-            PanelVisibility = Visibility.Collapsed;
-            ButtonVisibility = Visibility.Visible;
-            if (DateText.Contains("No data available") && !String.IsNullOrWhiteSpace(DateTextIn))
+            if (DateText.Contains("No data available") || !String.IsNullOrWhiteSpace(DateTextIn))
             {
                 m.MemoryDictionary.Add(SelectedDate, new ObservableCollection<string> { DateTextIn });
-            }
-            else if (DateTextIn == "")
-            {
-
             }
             else if (m.MemoryDictionary.ContainsKey(SelectedDate))
             {
@@ -167,33 +174,99 @@ namespace CalanderTest
             }
             if (Repeat)
             {
-                switch(RepeatFrequency)
+                var tempList = new ObservableCollection<ImageSource>();
+                if (m.ImageDictionary.ContainsKey(SelectedDate))
+                {
+                    tempList = m.ImageDictionary[SelectedDate];
+                }
+                switch (RepeatFrequency)
                 {
                     case "Weekly":
                         for (int i = 0; i < 52; i++)
                         {
                             SelectedDate = SelectedDate.AddDays(7);
-                            m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                            if (!m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                m.MemoryDictionary.Add(SelectedDate, new ObservableCollection<string>());
+                                foreach (var text in DateText)
+                                {
+                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
+                            else if (m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                foreach (var text in DateText)
+                                {
+                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
                         }
                         break;
                     case "Monthly":
                         for (int i = 0; i < 12; i++)
                         {
                             SelectedDate = SelectedDate.AddMonths(1);
-                            m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                            if (!m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                m.MemoryDictionary.Add(SelectedDate, new ObservableCollection<string>());
+                                foreach (var text in DateText)
+                                {
+                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
+                            else if (m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                foreach (var text in DateText)
+                                {
+                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
                         }
                         break;
                     case "Yearly":
                         for (int i = 0; i < 5; i++)
                         {
                             SelectedDate = SelectedDate.AddYears(1);
-                            m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                            if (!m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                m.MemoryDictionary.Add(SelectedDate, new ObservableCollection<string>());
+                                foreach (var text in DateText)
+                                {
+                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
+                            else if (m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                foreach (var text in DateText)
+                                {
+                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
                         }
                         break;
                 }
             }
-
             DateTextIn = "";
+
+        }
+
+        public void Leave()
+        {
+            PanelVisibility = Visibility.Collapsed;
+            ButtonVisibility = Visibility.Visible;
+            Repeat = false;
         }
 
         public void AddPhoto()

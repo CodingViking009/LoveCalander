@@ -34,7 +34,7 @@ namespace CalanderTest
                         galleryData.Add(new MemoryImage
                         {
                             Date = data.Date,
-                            Text = new List<string> { MemoryDictionary.ContainsKey(data) ? string.Join(", ", MemoryDictionary[data]) : "" },
+                            Text = new List<string> { MemoryDictionary.ContainsKey(data) ? string.Join(", ", MemoryDictionary[data]) : null},
                             ImagePath = ImageDictionary.ContainsKey(data)
                                 ? ImageDictionary[data]
                                     .OfType<BitmapImage>()
