@@ -24,5 +24,10 @@ namespace CalanderTest
         {
             InitializeComponent();
         }
+
+        private void OnClosed(object sender, EventArgs e)
+        {
+            vm.OnCloseSave();
+        }
     }
 }

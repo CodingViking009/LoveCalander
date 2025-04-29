@@ -9,7 +9,7 @@ namespace CalanderTest
     internal class MemoryImage
     {
         public DateTime Date { get; set; }
-        public string Text { get; set; }
-        public string ImagePath { get; set; }
+        public List<string> Text { get; set; }
+        public List<string> ImagePath { get; set; }
     }
 }

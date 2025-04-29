@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CalanderTest"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Closed="OnClosed">
     <Window.DataContext>
-    <local:ViewModel/>
+    <local:ViewModel x:Name="vm"/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
@@ -48,9 +48,14 @@
 
                     <Label Content="No images on this date" Visibility="{Binding AltTextVisibility}"/>
 
+                    <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                        <CheckBox IsChecked="{Binding Repeat}" Content="Repeating Date" Command="{Binding CheckBoxComm}"/>
+                        <ComboBox IsEnabled="{Binding SelectEnabled}" ItemsSource="{Binding RepeatFrequencyList}" SelectedItem="{Binding RepeatFrequency}"/>
+                    </StackPanel>
+
                     <Button Content="Upload Photo" Command="{Binding AddPhotoComm}"/>
 
-                </StackPanel>
+                
 
                 <ListBox IsEnabled="False" ItemsSource="{Binding DateText}"/>
 

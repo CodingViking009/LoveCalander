@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -12,7 +13,7 @@ using Prism.Mvvm;
 
 namespace CalanderTest
 {
-    public class ViewModel : BindableBase, IApplicationLifecycleAware
+    public class ViewModel : BindableBase
     {
         private Model m;
         private DateTime _selectedDate;
@@ -22,7 +23,11 @@ namespace CalanderTest
         private Visibility _altTextVisibility;
         private ObservableCollection<string> _dateText;
         private ObservableCollection<ImageSource> _photos;
+        private List<string> _repeatFrequencyList;
         private string _dateTextIn;
+        private string _repeatFrequency;
+        private bool _repeat;
+        private bool _selectEnabled;
 
         public DateTime SelectedDate
         {
@@ -66,22 +71,49 @@ namespace CalanderTest
             set => SetProperty(ref _photos, value);
         }
 
+        public List<string> RepeatFrequencyList
+        {
+            get => _repeatFrequencyList;
+            set => SetProperty(ref _repeatFrequencyList, value);
+        }
+
         public string DateTextIn
         {
             get => _dateTextIn;
             set => SetProperty(ref _dateTextIn, value);
         }
 
+        public string RepeatFrequency
+        {
+            get => _repeatFrequency;
+            set => SetProperty(ref _repeatFrequency, value);
+        }
+
+        public bool Repeat
+        {
+            get => _repeat;
+            set => SetProperty(ref _repeat, value);
+        }
+
+        public bool SelectEnabled
+        {
+            get => _selectEnabled;
+            set => SetProperty(ref _selectEnabled, value);
+        }
+
         public ICommand EnterComm { get; }
         public ICommand LeaveComm { get; }
         public ICommand AddPhotoComm { get; }
+        public ICommand CheckBoxComm { get; }
 
         public ViewModel()
         {
             m = new Model();
-            m.LoadGalleryData();
-            _photos = new ObservableCollection<ImageSource>();
+            Photos = new ObservableCollection<ImageSource>();
+            RepeatFrequencyList = new List<string> { "Weekly", "Monthly", "Yearly" };
             SelectedDate = DateTime.Now;
+            Repeat = false;
+            SelectEnabled = false;
             PanelVisibility = Visibility.Collapsed;
             ButtonVisibility = Visibility.Visible;
             ImageVisibility = Visibility.Collapsed;
@@ -89,15 +121,21 @@ namespace CalanderTest
             EnterComm = new DelegateCommand(Enter);
             LeaveComm = new DelegateCommand(Leave);
             AddPhotoComm = new DelegateCommand(AddPhoto);
+            CheckBoxComm = new DelegateCommand(CheckBox);
         }
 
         public void Enter()
         {
             PanelVisibility = Visibility.Visible;
             ButtonVisibility = Visibility.Collapsed;
-            DateText = m.MemoryDictionary.ContainsKey(SelectedDate)
-                ? m.MemoryDictionary[SelectedDate]
-                : new ObservableCollection<string> { "No data available" };
+            if (m.MemoryDictionary.ContainsKey(SelectedDate))
+            {
+                DateText = m.MemoryDictionary[SelectedDate];
+            }
+            else
+            {
+                DateText = new ObservableCollection<string> { "No data available" };
+            }
             if (m.ImageDictionary.ContainsKey(SelectedDate))
             {
                 AltTextVisibility = Visibility.Collapsed;
@@ -121,11 +159,38 @@ namespace CalanderTest
             }
             else if (DateTextIn == "")
             {
-                
+
             }
             else if (m.MemoryDictionary.ContainsKey(SelectedDate))
             {
                 m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+            }
+            if (Repeat)
+            {
+                switch(RepeatFrequency)
+                {
+                    case "Weekly":
+                        for (int i = 0; i < 52; i++)
+                        {
+                            SelectedDate = SelectedDate.AddDays(7);
+                            m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                        }
+                        break;
+                    case "Monthly":
+                        for (int i = 0; i < 12; i++)
+                        {
+                            SelectedDate = SelectedDate.AddMonths(1);
+                            m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                        }
+                        break;
+                    case "Yearly":
+                        for (int i = 0; i < 5; i++)
+                        {
+                            SelectedDate = SelectedDate.AddYears(1);
+                            m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                        }
+                        break;
+                }
             }
 
             DateTextIn = "";
@@ -152,18 +217,26 @@ namespace CalanderTest
                     var bitmap = new BitmapImage(new Uri(fileName));
                     m.ImageDictionary[SelectedDate].Add(bitmap);
                 }
+
                 AltTextVisibility = Visibility.Collapsed;
                 ImageVisibility = Visibility.Visible;
                 Photos = m.ImageDictionary[SelectedDate];
             }
         }
 
-        public void OnResume()
+        public void CheckBox()
         {
-            throw new NotImplementedException();
+            if (Repeat)
+            {
+                SelectEnabled = true;
+            }
+            else
+            {
+                SelectEnabled = false;
+            }
         }
 
-        public void OnSleep()
+        public void OnCloseSave()
         {
             m.SaveGalleryData();
         }
