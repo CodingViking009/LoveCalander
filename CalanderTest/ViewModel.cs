@@ -10,6 +10,7 @@ using Microsoft.Win32;
 using Prism.AppModel;
 using Prism.Commands;
 using Prism.Mvvm;
+using Xamarin.Forms.Internals;
 
 namespace CalanderTest
 {
@@ -149,7 +150,7 @@ namespace CalanderTest
             {
                 DateText = new ObservableCollection<string> { "No data available" };
             }
-            if (m.ImageDictionary.ContainsKey(SelectedDate))
+            if (m.ImageDictionary.ContainsKey(SelectedDate) && m.ImageDictionary[SelectedDate].Count > 0)
             {
                 AltTextVisibility = Visibility.Collapsed;
                 ImageVisibility = Visibility.Visible;
@@ -190,7 +191,7 @@ namespace CalanderTest
                                 m.MemoryDictionary.Add(SelectedDate, new ObservableCollection<string>());
                                 foreach (var text in DateText)
                                 {
-                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
                                 }
                                 m.MemoryDictionary[SelectedDate].Add(DateTextIn);
                                 m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
@@ -199,7 +200,7 @@ namespace CalanderTest
                             {
                                 foreach (var text in DateText)
                                 {
-                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
                                 }
                                 m.MemoryDictionary[SelectedDate].Add(DateTextIn);
                                 m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
@@ -215,7 +216,7 @@ namespace CalanderTest
                                 m.MemoryDictionary.Add(SelectedDate, new ObservableCollection<string>());
                                 foreach (var text in DateText)
                                 {
-                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
                                 }
                                 m.MemoryDictionary[SelectedDate].Add(DateTextIn);
                                 m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
@@ -224,7 +225,7 @@ namespace CalanderTest
                             {
                                 foreach (var text in DateText)
                                 {
-                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
                                 }
                                 m.MemoryDictionary[SelectedDate].Add(DateTextIn);
                                 m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
@@ -240,7 +241,7 @@ namespace CalanderTest
                                 m.MemoryDictionary.Add(SelectedDate, new ObservableCollection<string>());
                                 foreach (var text in DateText)
                                 {
-                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
                                 }
                                 m.MemoryDictionary[SelectedDate].Add(DateTextIn);
                                 m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
@@ -249,7 +250,7 @@ namespace CalanderTest
                             {
                                 foreach (var text in DateText)
                                 {
-                                    m.MemoryDictionary[SelectedDate].Add(text);
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
                                 }
                                 m.MemoryDictionary[SelectedDate].Add(DateTextIn);
                                 m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
