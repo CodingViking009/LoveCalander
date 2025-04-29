@@ -6,12 +6,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using Prism.AppModel;
 using Prism.Commands;
 using Prism.Mvvm;
 
 namespace CalanderTest
 {
-    public class ViewModel : BindableBase
+    public class ViewModel : BindableBase, IApplicationLifecycleAware
     {
         private Model m;
         private DateTime _selectedDate;
@@ -78,6 +79,7 @@ namespace CalanderTest
         public ViewModel()
         {
             m = new Model();
+            m.LoadGalleryData();
             _photos = new ObservableCollection<ImageSource>();
             SelectedDate = DateTime.Now;
             PanelVisibility = Visibility.Collapsed;
@@ -154,6 +156,16 @@ namespace CalanderTest
                 ImageVisibility = Visibility.Visible;
                 Photos = m.ImageDictionary[SelectedDate];
             }
+        }
+
+        public void OnResume()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnSleep()
+        {
+            m.SaveGalleryData();
         }
     }
 }
