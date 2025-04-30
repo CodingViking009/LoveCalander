@@ -1,0 +1,162 @@
+[
+  {
+    "Date": "2024-12-09T00:00:00",
+    "Text": [
+      "Became Couple, "
+    ],
+    "ImagePath": [
+      "SampleImages\\Sample5.png",
+      "SampleImages\\Sample4.png"
+    ]
+  },
+  {
+    "Date": "2025-01-01T00:00:00",
+    "Text": [
+      "Neujahr (New Year\u0027s Day)"
+    ],
+    "ImagePath": [
+      "SampleImages\\newyear.png"
+    ]
+  },
+  {
+    "Date": "2025-01-06T00:00:00",
+    "Text": [
+      "Heilige Drei K\u00F6nige (Epiphany)"
+    ],
+    "ImagePath": [
+      "SampleImages\\epiphany.png"
+    ]
+  },
+  {
+    "Date": "2025-03-30T00:00:00",
+    "Text": [
+      "Sommerzeit beginnt (Daylight Saving Starts)"
+    ],
+    "ImagePath": []
+  },
+  {
+    "Date": "2025-04-18T00:00:00",
+    "Text": [
+      "Karfreitag (Good Friday)"
+    ],
+    "ImagePath": [
+      "SampleImages\\karfreitag.png"
+    ]
+  },
+  {
+    "Date": "2025-04-20T00:00:00",
+    "Text": [
+      "Ostersonntag (Easter Sunday)"
+    ],
+    "ImagePath": [
+      "SampleImages\\eastersunday.png"
+    ]
+  },
+  {
+    "Date": "2025-04-21T00:00:00",
+    "Text": [
+      "Ostermontag (Easter Monday)"
+    ],
+    "ImagePath": [
+      "SampleImages\\easter.png"
+    ]
+  },
+  {
+    "Date": "2025-05-01T00:00:00",
+    "Text": [
+      "Tag der Arbeit (Labor Day)"
+    ],
+    "ImagePath": [
+      "SampleImages\\arbeitstag.png"
+    ]
+  },
+  {
+    "Date": "2025-05-29T00:00:00",
+    "Text": [
+      "Christi Himmelfahrt (Ascension Day)"
+    ],
+    "ImagePath": [
+      "SampleImages\\ascension.png"
+    ]
+  },
+  {
+    "Date": "2025-06-08T00:00:00",
+    "Text": [
+      "Pfingstsonntag (Pentecost Sunday)"
+    ],
+    "ImagePath": [
+      "SampleImages\\pentecost_sunday.png"
+    ]
+  },
+  {
+    "Date": "2025-06-09T00:00:00",
+    "Text": [
+      "Pfingstmontag (Whit Monday)"
+    ],
+    "ImagePath": []
+  },
+  {
+    "Date": "2025-06-19T00:00:00",
+    "Text": [
+      "Fronleichnam (Corpus Christi)"
+    ],
+    "ImagePath": [
+      "SampleImages\\corpuschristi.png"
+    ]
+  },
+  {
+    "Date": "2025-10-03T00:00:00",
+    "Text": [
+      "Tag der Deutschen Einheit (German Unity Day)"
+    ],
+    "ImagePath": [
+      "SampleImages\\unity.png"
+    ]
+  },
+  {
+    "Date": "2025-10-26T00:00:00",
+    "Text": [
+      "Winterzeit beginnt (Daylight Saving Ends)"
+    ],
+    "ImagePath": []
+  },
+  {
+    "Date": "2025-10-31T00:00:00",
+    "Text": [
+      "Reformationstag (Reformation Day)"
+    ],
+    "ImagePath": [
+      "SampleImages\\reformation.png"
+    ]
+  },
+  {
+    "Date": "2025-11-01T00:00:00",
+    "Text": [
+      "Allerheiligen (All Saints\u0027 Day)"
+    ],
+    "ImagePath": []
+  },
+  {
+    "Date": "2025-12-25T00:00:00",
+    "Text": [
+      "1. Weihnachtstag (Christmas Day)"
+    ],
+    "ImagePath": []
+  },
+  {
+    "Date": "2025-12-26T00:00:00",
+    "Text": [
+      "2. Weihnachtstag (Boxing Day)"
+    ],
+    "ImagePath": []
+  },
+  {
+    "Date": "2025-12-31T00:00:00",
+    "Text": [
+      "Silvester (New Year\u0027s Eve)"
+    ],
+    "ImagePath": [
+      "SampleImages\\silvester.png"
+    ]
+  }
+]
