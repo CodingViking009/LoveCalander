@@ -260,7 +260,7 @@ namespace CalanderTest
                 }
             }
             DateTextIn = "";
-
+            DateText = m.MemoryDictionary[SelectedDate];
         }
 
         public void Leave()
@@ -288,7 +288,7 @@ namespace CalanderTest
 
                 foreach (string fileName in openFileDialog.FileNames)
                 {
-                    var bitmap = new BitmapImage(new Uri(fileName));
+                    var bitmap = new BitmapImage(new Uri(fileName, UriKind.Relative));
                     m.ImageDictionary[SelectedDate].Add(bitmap);
                 }
 
