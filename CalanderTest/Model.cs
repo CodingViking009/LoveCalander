@@ -75,7 +75,7 @@ namespace CalanderTest
                 {
                     var bitmap = new BitmapImage();
                     bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(image, UriKind.Absolute);
+                    bitmap.UriSource = new Uri(image, UriKind.Relative);
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
                     bitmap.Freeze();
