@@ -38,7 +38,7 @@ namespace CalanderTest
                             ImagePath = ImageDictionary.ContainsKey(data)
                                 ? ImageDictionary[data]
                                     .OfType<BitmapImage>()
-                                    .Select(b => b.UriSource?.LocalPath ?? "")
+                                    .Select(b => b.UriSource?.ToString() ?? "")
                                     .ToList()
                                 : new List<string>()
                         });
