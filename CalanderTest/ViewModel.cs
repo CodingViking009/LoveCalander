@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using Prism.AppModel;
 using Prism.Commands;
 using Prism.Mvvm;
+using Xamarin.Forms.Internals;
 
 namespace CalanderTest
 {
@@ -21,7 +24,11 @@ namespace CalanderTest
         private Visibility _altTextVisibility;
         private ObservableCollection<string> _dateText;
         private ObservableCollection<ImageSource> _photos;
+        private List<string> _repeatFrequencyList;
         private string _dateTextIn;
+        private string _repeatFrequency;
+        private bool _repeat;
+        private bool _selectEnabled;
 
         public DateTime SelectedDate
         {
@@ -65,38 +72,85 @@ namespace CalanderTest
             set => SetProperty(ref _photos, value);
         }
 
+        public List<string> RepeatFrequencyList
+        {
+            get => _repeatFrequencyList;
+            set => SetProperty(ref _repeatFrequencyList, value);
+        }
+
         public string DateTextIn
         {
             get => _dateTextIn;
             set => SetProperty(ref _dateTextIn, value);
         }
 
+        public string RepeatFrequency
+        {
+            get => _repeatFrequency;
+            set => SetProperty(ref _repeatFrequency, value);
+        }
+
+        public bool Repeat
+        {
+            get => _repeat;
+            set
+            {
+                SetProperty(ref _repeat, value);
+                if (Repeat)
+                {
+                    SelectEnabled = true;
+                }
+                else
+                {
+                    SelectEnabled = false;
+                }
+            }
+        }
+
+        public bool SelectEnabled
+        {
+            get => _selectEnabled;
+            set => SetProperty(ref _selectEnabled, value);
+        }
+
         public ICommand EnterComm { get; }
         public ICommand LeaveComm { get; }
+        public ICommand SaveComm { get; }
         public ICommand AddPhotoComm { get; }
+        public ICommand CheckBoxComm { get; }
 
         public ViewModel()
         {
             m = new Model();
-            _photos = new ObservableCollection<ImageSource>();
+            Photos = new ObservableCollection<ImageSource>();
+            RepeatFrequencyList = new List<string> { "Weekly", "Monthly", "Yearly" };
             SelectedDate = DateTime.Now;
+            Repeat = false;
+            SelectEnabled = false;
             PanelVisibility = Visibility.Collapsed;
             ButtonVisibility = Visibility.Visible;
             ImageVisibility = Visibility.Collapsed;
             AltTextVisibility = Visibility.Visible;
             EnterComm = new DelegateCommand(Enter);
             LeaveComm = new DelegateCommand(Leave);
+            SaveComm = new DelegateCommand(Save);
             AddPhotoComm = new DelegateCommand(AddPhoto);
+            CheckBoxComm = new DelegateCommand(CheckBox);
         }
 
         public void Enter()
         {
             PanelVisibility = Visibility.Visible;
             ButtonVisibility = Visibility.Collapsed;
-            DateText = m.MemoryDictionary.ContainsKey(SelectedDate)
-                ? m.MemoryDictionary[SelectedDate]
-                : new ObservableCollection<string> { "No data available" };
-            if (m.ImageDictionary.ContainsKey(SelectedDate))
+            if (m.MemoryDictionary.ContainsKey(SelectedDate))
+            {
+                DateText = m.MemoryDictionary[SelectedDate];
+            }
+            else
+            {
+                DateText = new ObservableCollection<string> { "No data available" };
+            }
+            if (m.ImageDictionary.ContainsKey(SelectedDate) && m.ImageDictionary[SelectedDate].Count > 0)
             {
                 AltTextVisibility = Visibility.Collapsed;
                 ImageVisibility = Visibility.Visible;
@@ -109,24 +163,111 @@ namespace CalanderTest
             }
         }
 
-        public void Leave()
+        public void Save()
         {
-            PanelVisibility = Visibility.Collapsed;
-            ButtonVisibility = Visibility.Visible;
-            if (DateText.Contains("No data available") && !String.IsNullOrWhiteSpace(DateTextIn))
+            if (DateText.Contains("No data available") || !String.IsNullOrWhiteSpace(DateTextIn))
             {
                 m.MemoryDictionary.Add(SelectedDate, new ObservableCollection<string> { DateTextIn });
-            }
-            else if (DateTextIn == "")
-            {
-                
             }
             else if (m.MemoryDictionary.ContainsKey(SelectedDate))
             {
                 m.MemoryDictionary[SelectedDate].Add(DateTextIn);
             }
-
+            if (Repeat)
+            {
+                var tempList = new ObservableCollection<ImageSource>();
+                if (m.ImageDictionary.ContainsKey(SelectedDate))
+                {
+                    tempList = m.ImageDictionary[SelectedDate];
+                }
+                switch (RepeatFrequency)
+                {
+                    case "Weekly":
+                        for (int i = 0; i < 52; i++)
+                        {
+                            SelectedDate = SelectedDate.AddDays(7);
+                            if (!m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                m.MemoryDictionary.Add(SelectedDate, new ObservableCollection<string>());
+                                foreach (var text in DateText)
+                                {
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
+                            else if (m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                foreach (var text in DateText)
+                                {
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
+                        }
+                        break;
+                    case "Monthly":
+                        for (int i = 0; i < 12; i++)
+                        {
+                            SelectedDate = SelectedDate.AddMonths(1);
+                            if (!m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                m.MemoryDictionary.Add(SelectedDate, new ObservableCollection<string>());
+                                foreach (var text in DateText)
+                                {
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
+                            else if (m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                foreach (var text in DateText)
+                                {
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
+                        }
+                        break;
+                    case "Yearly":
+                        for (int i = 0; i < 5; i++)
+                        {
+                            SelectedDate = SelectedDate.AddYears(1);
+                            if (!m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                m.MemoryDictionary.Add(SelectedDate, new ObservableCollection<string>());
+                                foreach (var text in DateText)
+                                {
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
+                            else if (m.MemoryDictionary.ContainsKey(SelectedDate))
+                            {
+                                foreach (var text in DateText)
+                                {
+                                    if (text != "No data available") m.MemoryDictionary[SelectedDate].Add(text);
+                                }
+                                m.MemoryDictionary[SelectedDate].Add(DateTextIn);
+                                m.ImageDictionary[SelectedDate] = new ObservableCollection<ImageSource>(tempList);
+                            }
+                        }
+                        break;
+                }
+            }
             DateTextIn = "";
+
+        }
+
+        public void Leave()
+        {
+            PanelVisibility = Visibility.Collapsed;
+            ButtonVisibility = Visibility.Visible;
+            Repeat = false;
         }
 
         public void AddPhoto()
@@ -150,10 +291,28 @@ namespace CalanderTest
                     var bitmap = new BitmapImage(new Uri(fileName));
                     m.ImageDictionary[SelectedDate].Add(bitmap);
                 }
+
                 AltTextVisibility = Visibility.Collapsed;
                 ImageVisibility = Visibility.Visible;
                 Photos = m.ImageDictionary[SelectedDate];
             }
+        }
+
+        public void CheckBox()
+        {
+            if (Repeat)
+            {
+                SelectEnabled = true;
+            }
+            else
+            {
+                SelectEnabled = false;
+            }
+        }
+
+        public void OnCloseSave()
+        {
+            m.SaveGalleryData();
         }
     }
 }
