@@ -288,7 +288,7 @@ namespace CalanderTest
 
                 foreach (string fileName in openFileDialog.FileNames)
                 {
-                    var bitmap = new BitmapImage(new Uri(fileName, UriKind.Relative));
+                    var bitmap = new BitmapImage(new Uri(fileName));
                     m.ImageDictionary[SelectedDate].Add(bitmap);
                 }
 

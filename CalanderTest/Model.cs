@@ -74,14 +74,18 @@ namespace CalanderTest
                 foreach (var image in item.ImagePath)
                 {
                     var bitmap = new BitmapImage();
+
                     bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(image, UriKind.Relative);
+                    bitmap.UriSource = image.StartsWith(@"C:\")
+                        ? new Uri(image, UriKind.Absolute)
+                        : new Uri(image, UriKind.Relative);
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
                     bitmap.Freeze();
 
                     ImageDictionary[item.Date].Add(bitmap);
                 }
+
 
 
                 foreach (var text in item.Text)
